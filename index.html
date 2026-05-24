@@ -15,6 +15,8 @@ body{
     overflow:hidden;
 }
 
+/* CRT scanlines */
+
 .scanlines::before{
     content:"";
     position:fixed;
@@ -32,16 +34,38 @@ body{
     z-index:999;
 }
 
+/* subtle screen flicker */
+
+.scanlines::after{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,0.02);
+    pointer-events:none;
+    animation:screenflicker 0.15s infinite;
+}
+
+@keyframes screenflicker{
+    0%{opacity:0.02;}
+    50%{opacity:0.05;}
+    100%{opacity:0.01;}
+}
+
 .container{
     position:relative;
     z-index:2;
     padding:40px;
+    max-width:800px;
 }
+
+/* glitch title */
 
 .glitch{
     font-size:3rem;
     position:relative;
     animation:flicker 2s infinite;
+    display:inline-block;
 }
 
 .glitch::before,
@@ -73,23 +97,40 @@ body{
     100%{opacity:1;}
 }
 
+/* floating background text */
+
 .backgroundText{
     position:fixed;
     color:#00ff6622;
     font-size:2rem;
     pointer-events:none;
     user-select:none;
-    animation:float 12s linear infinite;
+    animation:float linear forwards;
+    white-space:nowrap;
+    z-index:0;
 }
 
 @keyframes float{
     from{
         transform:translateY(100vh);
+        opacity:0;
     }
+
+    20%{
+        opacity:1;
+    }
+
+    80%{
+        opacity:1;
+    }
+
     to{
         transform:translateY(-120vh);
+        opacity:0;
     }
 }
+
+/* form */
 
 input{
     width:100%;
@@ -99,6 +140,12 @@ input{
     padding:12px;
     font-family:monospace;
     margin-top:20px;
+    box-sizing:border-box;
+}
+
+input:focus{
+    outline:none;
+    box-shadow:0 0 10px #00ff66;
 }
 
 button{
@@ -109,6 +156,11 @@ button{
     border:none;
     cursor:pointer;
     font-weight:bold;
+    font-family:monospace;
+}
+
+button:hover{
+    box-shadow:0 0 15px #00ff66;
 }
 
 #message{
@@ -137,6 +189,8 @@ button{
     display:none;
 }
 
+/* fake warning */
+
 .fakeWarning{
     position:fixed;
     bottom:10px;
@@ -144,12 +198,44 @@ button{
     color:red;
     opacity:0.3;
     animation:flicker 1s infinite;
+    z-index:10;
+}
+
+/* creepy flashing text */
+
+.flashText{
+    position:fixed;
+    top:10%;
+    left:50%;
+    transform:translateX(-50%);
+    color:red;
+    font-size:2rem;
+    opacity:0;
+    pointer-events:none;
+    animation:flashMessage 8s infinite;
+    z-index:5;
+}
+
+@keyframes flashMessage{
+    0%{opacity:0;}
+    45%{opacity:0;}
+    46%{opacity:1;}
+    47%{opacity:0;}
+    100%{opacity:0;}
+}
+
+a{
+    color:cyan;
 }
 
 </style>
 </head>
 
 <body class="scanlines">
+
+<div class="flashText">
+USE YOUR HEAD
+</div>
 
 <div class="container">
 
@@ -184,17 +270,25 @@ USE YOUR HEAD
 
 <script>
 
+/* passwords */
+
 const FIRST_PASSWORD = "RUBIX";
 const SECOND_PASSWORD = "L0G1T3CH";
 
+/* replace later */
+
 const YOUTUBE_LINK = "https://youtube.com/";
 const FINAL_IMAGE_LINK = "https://example.com/final.jpg";
+
+/* coordinates */
 
 const CORRECT_COORDINATES = "12.9916, 77.7045";
 
 const message = document.getElementById("message");
 const chatbox = document.getElementById("chatbox");
 const chatSection = document.getElementById("chatSection");
+
+/* password checker */
 
 function checkPassword(){
 
@@ -235,6 +329,8 @@ function checkPassword(){
     }
 }
 
+/* bot message */
+
 function botMessage(text){
 
     const div = document.createElement("div");
@@ -250,6 +346,8 @@ function botMessage(text){
 
     chatbox.scrollTop = chatbox.scrollHeight;
 }
+
+/* user message */
 
 function userMessage(text){
 
@@ -267,6 +365,8 @@ function userMessage(text){
     chatbox.scrollTop = chatbox.scrollHeight;
 }
 
+/* chat system */
+
 function sendMessage(){
 
     const input = document.getElementById("chatInput");
@@ -281,7 +381,12 @@ function sendMessage(){
 
     setTimeout(()=>{
 
-        if(text === CORRECT_COORDINATES){
+        /* ignore spaces */
+
+        if(
+            text.replace(/\s/g,'') ===
+            CORRECT_COORDINATES.replace(/\s/g,'')
+        ){
 
             botMessage(`
 coordinates verified.<br><br>
@@ -295,12 +400,19 @@ OPEN FILE
         }else{
 
             const responses = [
+
                 "pelase say the coordinates to continue",
                 "incorrect",
                 "USE YOUR HEAD",
                 "wrong location",
                 "signal mismatch",
-                "try again"
+                "try again",
+                "Hello there",
+                "you already know the answer",
+                "the puzzle box is watching",
+                "closer",
+                "not quite"
+
             ];
 
             const random =
@@ -314,15 +426,23 @@ OPEN FILE
     },700);
 }
 
+/* floating creepy text */
+
 function createFloatingText(){
 
     const words = [
+
         "USE YOUR HEAD",
         "SOLVE. THE. PUZZLE. GET. YOUR. GIFT.",
         "LOOK CLOSER",
-        "Hello",
-        "THE ANSWER IS THERE"
-        "THE PASSWORD IS THE HEADTHEPASSWORDISTHEHEAD"
+        "Hello there",
+        "THE ANSWER IS THERE",
+        "PUZZLE BOX",
+        "WAKE UP",
+        "THE PASSWORD IS THE HEAD",
+        "ITS RIGHT IN FRONT OF YOU",
+        "DO NOT TRUST THE BOX"
+
     ];
 
     const div = document.createElement("div");
@@ -337,6 +457,9 @@ function createFloatingText(){
     div.style.animationDuration =
         (8 + Math.random()*10) + "s";
 
+    div.style.fontSize =
+        (1 + Math.random()*2.5) + "rem";
+
     document.body.appendChild(div);
 
     setTimeout(()=>{
@@ -344,7 +467,32 @@ function createFloatingText(){
     },15000);
 }
 
+/* spawn floating text */
+
 setInterval(createFloatingText,1200);
+
+/* random creepy console logs */
+
+const consoleMessages = [
+
+    "use your head",
+    "the puzzle sees you",
+    "wrong coordinates",
+    "look closer",
+    "hello there",
+    "the answer is already here"
+
+];
+
+setInterval(()=>{
+
+    console.log(
+        consoleMessages[
+            Math.floor(Math.random()*consoleMessages.length)
+        ]
+    );
+
+},4000);
 
 </script>
 
