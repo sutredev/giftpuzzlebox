@@ -15,7 +15,6 @@ body{
     overflow:hidden;
 }
 
-/* CRT scanlines */
 
 .scanlines::before{
     content:"";
@@ -34,7 +33,7 @@ body{
     z-index:999;
 }
 
-/* subtle screen flicker */
+
 
 .scanlines::after{
     content:"";
@@ -59,7 +58,7 @@ body{
     max-width:800px;
 }
 
-/* glitch title */
+
 
 .glitch{
     font-size:3rem;
@@ -97,7 +96,7 @@ body{
     100%{opacity:1;}
 }
 
-/* floating background text */
+
 
 .backgroundText{
     position:fixed;
@@ -130,7 +129,7 @@ body{
     }
 }
 
-/* form */
+
 
 input{
     width:100%;
@@ -189,7 +188,7 @@ button:hover{
     display:none;
 }
 
-/* fake warning */
+
 
 .fakeWarning{
     position:fixed;
@@ -201,7 +200,7 @@ button:hover{
     z-index:10;
 }
 
-/* creepy flashing text */
+
 
 .flashText{
     position:fixed;
@@ -270,7 +269,7 @@ USE YOUR HEAD
 
 <script>
 
-/* passwords */
+    
 
 const FIRST_PASSWORD = "RUBIX";
 const SECOND_PASSWORD = "L0G1T3CH";
@@ -288,7 +287,7 @@ const message = document.getElementById("message");
 const chatbox = document.getElementById("chatbox");
 const chatSection = document.getElementById("chatSection");
 
-/* password checker */
+
 
 function checkPassword(){
 
@@ -329,7 +328,7 @@ function checkPassword(){
     }
 }
 
-/* bot message */
+
 
 function botMessage(text){
 
@@ -347,7 +346,6 @@ function botMessage(text){
     chatbox.scrollTop = chatbox.scrollHeight;
 }
 
-/* user message */
 
 function userMessage(text){
 
@@ -365,7 +363,6 @@ function userMessage(text){
     chatbox.scrollTop = chatbox.scrollHeight;
 }
 
-/* chat system */
 
 function sendMessage(){
 
@@ -381,7 +378,6 @@ function sendMessage(){
 
     setTimeout(()=>{
 
-        /* ignore spaces */
 
         if(
             text.replace(/\s/g,'') ===
@@ -426,7 +422,6 @@ OPEN FILE
     },700);
 }
 
-/* floating creepy text */
 
 function createFloatingText(){
 
@@ -467,11 +462,9 @@ function createFloatingText(){
     },15000);
 }
 
-/* spawn floating text */
 
 setInterval(createFloatingText,1200);
 
-/* random creepy console logs */
 
 const consoleMessages = [
 
